@@ -19,12 +19,14 @@ pip install -r requirements.txt
 #   sudo apt install tesseract-ocr tesseract-ocr-tam tesseract-ocr-hin
 uvicorn app.main:app --reload
 ```
-Try it:
+Open **http://localhost:8000** for the web app: paste a message (or tap an example), pick English, Tamil or Hindi, and press Check. The result shows a colour-coded risk level, score, plain reasons and what to do, and a Listen button reads it aloud if your browser has a voice for that language.
+
+API (optional):
 ```bash
 curl -X POST localhost:8000/analyze -H "Content-Type: application/json" \
   -d '{"text":"You are under digital arrest. Do not tell anyone and pay immediately.","lang":"en"}'
 ```
-Interactive docs: http://localhost:8000/docs
+Interactive API docs: http://localhost:8000/docs
 
 ## Environment variables
 None are required for the baseline. Optional (roadmap features):
@@ -44,7 +46,8 @@ pytest -q
 ## Project structure
 ```
 app/detector.py   scoring engine (rules + optional ML score)
-app/main.py       FastAPI endpoints
+app/main.py       FastAPI endpoints and web page route
+app/static/       web app (index.html)
 tests/            unit tests
 sample_data/      labelled sample messages
 TECH_DESIGN.md    architecture and design decisions

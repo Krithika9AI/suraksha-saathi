@@ -27,5 +27,29 @@ def test_advice_is_localised():
     assert "1930" in analyze("share otp", lang="ta").advice
 
 
+def test_hindi_and_tamil_scams_are_high():
+    hi = analyze("आपको गिरफ्तार किया जाएगा। तुरंत पैसे भेजें और किसी को न बताएं।", lang="hi")
+    ta = analyze("உங்களை கைது செய்வோம். உடனடியாக பணம் அனுப்புங்கள். யாரிடமும் சொல்ல வேண்டாம்.", lang="ta")
+    assert hi.level == "HIGH" and ta.level == "HIGH"
+    assert "गिरफ्तारी" in hi.reasons[0] and "கைது" in ta.reasons[0]
+
+
+def test_normal_hindi_and_tamil_messages_are_low():
+    assert analyze("माँ, मैं शाम 7 बजे तक घर पहुँच जाऊँगा।", lang="hi").level == "LOW"
+    assert analyze("அம்மா, நான் மாலை 7 மணிக்கு வீடு வருவேன்.", lang="ta").level == "LOW"
+
+
+def test_web_page_and_api_work():
+    from fastapi.testclient import TestClient
+
+    from app.main import app
+
+    client = TestClient(app)
+    page = client.get("/")
+    assert page.status_code == 200 and "Suraksha Saathi" in page.text
+    r = client.post("/analyze", json={"text": "Share OTP to claim your lottery prize money", "lang": "en"})
+    assert r.status_code == 200 and r.json()["level"] == "HIGH"
+
+
 def test_score_is_capped():
     assert analyze("digital arrest kyc update pending share otp you won lottery urgent do not tell http://bit.ly/x").score == 100

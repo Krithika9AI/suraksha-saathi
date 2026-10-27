@@ -1,18 +1,26 @@
-"""FastAPI service: POST /analyze with text, or /analyze-image with a screenshot (OCR)."""
+"""FastAPI service: web page at /, POST /analyze for text, POST /analyze-image for screenshots (OCR)."""
 import io
 from dataclasses import asdict
+from pathlib import Path
 
 from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from app.detector import analyze
 
-app = FastAPI(title="Suraksha Saathi", version="0.1.0")
+app = FastAPI(title="Suraksha Saathi", version="0.2.0")
+STATIC = Path(__file__).parent / "static"
 
 
 class TextIn(BaseModel):
     text: str
     lang: str = "en"  # en | hi | ta
+
+
+@app.get("/", include_in_schema=False)
+def home():
+    return FileResponse(STATIC / "index.html")
 
 
 @app.post("/analyze")

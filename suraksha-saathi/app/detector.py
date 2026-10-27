@@ -16,6 +16,55 @@ RULES = [
 URL_RE = re.compile(r"https?://[^\s]+|\b[\w-]+\.(?:xyz|top|click|link|info)\b", re.I)
 SHORTENERS = ("bit.ly", "tinyurl.com", "t.co", "cutt.ly")
 
+# Plain-language reasons shown to the user, per language.
+REASONS = {
+    "digital_arrest": {
+        "en": "Threatens arrest or claims to be police or CBI",
+        "hi": "गिरफ्तारी की धमकी या पुलिस/CBI होने का दावा",
+        "ta": "கைது செய்வோம் என மிரட்டுகிறது அல்லது போலீஸ்/CBI என கூறுகிறது",
+    },
+    "kyc_fraud": {
+        "en": "Fake KYC or account-block warning",
+        "hi": "फर्जी KYC या खाता बंद होने की चेतावनी",
+        "ta": "போலி KYC அல்லது கணக்கு முடக்க எச்சரிக்கை",
+    },
+    "otp_theft": {
+        "en": "Asks you to share an OTP",
+        "hi": "OTP साझा करने को कहता है",
+        "ta": "OTP பகிரச் சொல்கிறது",
+    },
+    "upi_collect": {
+        "en": "Asks you to approve a UPI request or enter your PIN",
+        "hi": "UPI अनुरोध स्वीकार करने या PIN डालने को कहता है",
+        "ta": "UPI கோரிக்கையை ஏற்க அல்லது PIN உள்ளிடச் சொல்கிறது",
+    },
+    "lottery_prize": {
+        "en": "Promises a prize or lottery win",
+        "hi": "इनाम या लॉटरी जीतने का झांसा",
+        "ta": "பரிசு அல்லது லாட்டரி வெற்றி என ஆசை காட்டுகிறது",
+    },
+    "job_task_scam": {
+        "en": "Offers easy money for simple online tasks",
+        "hi": "आसान ऑनलाइन काम के बदले कमाई का लालच",
+        "ta": "எளிய ஆன்லைன் வேலைக்கு எளிதான பணம் என ஆசை காட்டுகிறது",
+    },
+    "urgency": {
+        "en": "Pushes you to act immediately",
+        "hi": "तुरंत कदम उठाने का दबाव",
+        "ta": "உடனே செயல்பட அவசரப்படுத்துகிறது",
+    },
+    "secrecy": {
+        "en": "Asks you to keep it secret",
+        "hi": "किसी को न बताने को कहता है",
+        "ta": "யாரிடமும் சொல்ல வேண்டாம் என்கிறது",
+    },
+    "link": {
+        "en": "Contains a suspicious or unverified link",
+        "hi": "संदिग्ध या अज्ञात लिंक है",
+        "ta": "சந்தேகத்திற்குரிய இணைப்பு உள்ளது",
+    },
+}
+
 ADVICE = {
     "en": "Do NOT pay, share OTP/PIN or click links. Call 1930 or report at cybercrime.gov.in. Talk to a family member first.",
     "hi": "पैसे न भेजें, OTP/PIN या लिंक साझा न करें। 1930 पर कॉल करें या cybercrime.gov.in पर शिकायत करें।",
@@ -32,6 +81,10 @@ class Verdict:
     advice: str = ""
 
 
+def _reason(key: str, lang: str) -> str:
+    return REASONS[key].get(lang, REASONS[key]["en"])
+
+
 def analyze(text: str, lang: str = "en", ml_score: int = 0) -> Verdict:
     t = text.lower()
     score, types, reasons = ml_score, [], []
@@ -40,10 +93,10 @@ def analyze(text: str, lang: str = "en", ml_score: int = 0) -> Verdict:
             score += weight
             if scam_type not in ("urgency", "secrecy"):
                 types.append(scam_type)
-            reasons.append(f"Matched pattern: {scam_type.replace('_', ' ')}")
+            reasons.append(_reason(scam_type, lang))
     for url in URL_RE.findall(t):
         score += 25 if any(s in url for s in SHORTENERS) or url.endswith(("xyz", "top", "click", "link")) else 10
-        reasons.append("Contains a suspicious or unverified link")
+        reasons.append(_reason("link", lang))
         break
     score = min(score, 100)
     level = "HIGH" if score >= 60 else "MEDIUM" if score >= 30 else "LOW"

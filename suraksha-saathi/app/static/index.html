@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suraksha Saathi</title>
+<style>
+  :root {
+    --ink: #10202e; --teal: #0b5d6b; --mist: #eaf4f4; --white: #ffffff;
+    --amber: #f2a93b; --red: #d64545; --green: #2e9e6b; --muted: #4b6270;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: "Segoe UI", Calibri, "Noto Sans Tamil", "Noto Sans Devanagari", Arial, sans-serif;
+    background: var(--mist); color: var(--ink); line-height: 1.5;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 48px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo { width: 44px; height: 44px; border-radius: 50%; background: var(--teal); display: grid; place-items: center; }
+  .logo svg { width: 24px; height: 24px; fill: var(--white); }
+  .brand h1 { font-family: Cambria, Georgia, serif; font-size: 26px; margin: 0; }
+  .langs { display: flex; gap: 6px; }
+  .langs button {
+    border: 2px solid var(--teal); background: var(--white); color: var(--teal);
+    padding: 6px 14px; border-radius: 999px; font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+  .langs button[aria-pressed="true"] { background: var(--teal); color: var(--white); }
+  .tagline { font-family: Cambria, Georgia, serif; font-size: 34px; line-height: 1.2; margin: 28px 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 20px; font-size: 17px; }
+  .card { background: var(--white); border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(16, 32, 46, 0.10); }
+  label { font-weight: 700; display: block; margin-bottom: 8px; }
+  textarea {
+    width: 100%; min-height: 130px; resize: vertical; font: inherit; font-size: 18px; color: var(--ink);
+    border: 2px solid #c5d6d8; border-radius: 12px; padding: 12px 14px; background: #fbfdfd;
+  }
+  textarea:focus, button:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; align-items: center; }
+  .chips span { color: var(--muted); font-size: 14px; }
+  .chip {
+    border: 1px solid #b7cdd0; background: var(--mist); color: var(--ink); border-radius: 999px;
+    padding: 6px 12px; font-size: 14px; cursor: pointer;
+  }
+  .actions { display: flex; gap: 10px; margin-top: 14px; }
+  .primary {
+    background: var(--teal); color: var(--white); border: 0; border-radius: 12px; padding: 12px 28px;
+    font-size: 18px; font-weight: 700; cursor: pointer;
+  }
+  .primary:disabled { opacity: 0.6; cursor: progress; }
+  .secondary { background: var(--white); color: var(--teal); border: 2px solid var(--teal); border-radius: 12px; padding: 12px 20px; font-size: 16px; font-weight: 600; cursor: pointer; }
+  #result { margin-top: 20px; display: none; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .badge { color: var(--white); font-weight: 800; letter-spacing: 0.5px; padding: 8px 18px; border-radius: 10px; font-size: 18px; }
+  .score { font-size: 36px; font-weight: 800; }
+  .meter { height: 12px; background: #e2ecec; border-radius: 999px; overflow: hidden; margin: 12px 0 14px; }
+  .meter div { height: 100%; width: 0; border-radius: 999px; transition: width 0.6s ease; }
+  .headline { font-size: 22px; font-weight: 700; margin: 0 0 12px; }
+  h2 { font-size: 16px; margin: 16px 0 6px; color: var(--teal); text-transform: none; }
+  ul { margin: 0; padding-left: 22px; font-size: 17px; }
+  li { margin: 4px 0; }
+  .advice { background: var(--amber); color: var(--ink); padding: 14px 16px; border-radius: 12px; font-weight: 600; font-size: 17px; }
+  .listen { margin-top: 12px; }
+  .note { color: var(--muted); font-size: 14px; margin-top: 12px; }
+  footer { text-align: center; color: var(--muted); font-size: 14px; margin-top: 28px; }
+  @media (max-width: 480px) { .tagline { font-size: 28px; } .primary { flex: 1; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 512 512"><path d="M466.5 83.7l-192-80a48.15 48.15 0 0 0-36.9 0l-192 80C27.7 91.1 16 108.6 16 128c0 198.5 114.5 335.7 221.5 380.3 11.8 4.9 25.1 4.9 36.9 0C360.1 472.6 496 349.3 496 128c0-19.4-11.7-36.9-29.5-44.3zM256.1 446.3l-.1-381 175.9 73.3c-3.3 151.4-82.1 261.1-175.8 307.7z"/></svg></div>
+      <h1>Suraksha Saathi</h1>
+    </div>
+    <div class="langs" role="group" aria-label="Language">
+      <button data-lang="en" aria-pressed="true">English</button>
+      <button data-lang="ta" aria-pressed="false">தமிழ்</button>
+      <button data-lang="hi" aria-pressed="false">हिन्दी</button>
+    </div>
+  </header>
+
+  <h2 class="tagline" id="tagline"></h2>
+  <p class="sub" id="sub"></p>
+
+  <section class="card">
+    <label for="msg" id="lblMsg"></label>
+    <textarea id="msg"></textarea>
+    <div class="chips" id="chips"></div>
+    <div class="actions">
+      <button class="primary" id="check"></button>
+      <button class="secondary" id="clear"></button>
+    </div>
+  </section>
+
+  <section class="card" id="result" aria-live="polite">
+    <div class="top">
+      <span class="badge" id="badge"></span>
+      <span class="score" id="score"></span>
+    </div>
+    <div class="meter"><div id="bar"></div></div>
+    <p class="headline" id="headline"></p>
+    <h2 id="hWhy"></h2>
+    <ul id="reasons"></ul>
+    <h2 id="hTodo"></h2>
+    <div class="advice" id="advice"></div>
+    <button class="secondary listen" id="listen"></button>
+    <p class="note" id="disclaimer"></p>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const I18N = {
+  en: {
+    speech: "en-IN", tagline: "Check before you trust",
+    sub: "Paste any message you are unsure about. We will tell you if it looks like a scam, and why.",
+    label: "Suspicious message", placeholder: "Paste the message here",
+    check: "Check", clear: "Clear", examples: "Try an example:", checking: "Checking...",
+    levels: { HIGH: "HIGH RISK", MEDIUM: "BE CAREFUL", LOW: "LOW RISK" },
+    headlines: { HIGH: "This is very likely a scam", MEDIUM: "This looks suspicious. Be careful", LOW: "No major warning signs found" },
+    none: "No warning signs matched.", why: "Why we flagged it", todo: "What to do now", listen: "Listen",
+    disclaimer: "A low score is not a guarantee of safety. When unsure, ask someone you trust or call 1930.",
+    error: "Could not reach the server. Is it running?", foot: "Messages are analysed on this server and are not stored.",
+    ex: [
+      ["Arrest threat", "This is CBI. A parcel in your name has narcotics. You are under digital arrest. Do not tell anyone and pay immediately."],
+      ["Prize and OTP", "Congratulations you have won a lottery prize money of Rs 25 lakh. Share OTP to claim."],
+      ["KYC link", "Dear customer your KYC update is pending. Account will be blocked today. Click http://bit.ly/kyc-now"],
+      ["Normal message", "Hi amma, I will reach home by 7 pm. Need anything from the market?"]
+    ]
+  },
+  ta: {
+    speech: "ta-IN", tagline: "நம்புவதற்கு முன் சரிபாருங்கள்",
+    sub: "உங்களுக்கு சந்தேகம் உள்ள எந்த செய்தியையும் ஒட்டுங்கள். அது மோசடியா, ஏன் என்று சொல்கிறோம்.",
+    label: "சந்தேகத்திற்குரிய செய்தி", placeholder: "செய்தியை இங்கே ஒட்டவும்",
+    check: "சரிபார்", clear: "அழி", examples: "எடுத்துக்காட்டு முயற்சிக்க:", checking: "சரிபார்க்கிறது...",
+    levels: { HIGH: "அதிக ஆபத்து", MEDIUM: "கவனம்", LOW: "குறைந்த ஆபத்து" },
+    headlines: { HIGH: "இது மோசடியாக இருக்க வாய்ப்பு அதிகம்", MEDIUM: "இது சந்தேகமாக உள்ளது. கவனமாக இருங்கள்", LOW: "பெரிய எச்சரிக்கை அறிகுறிகள் இல்லை" },
+    none: "எச்சரிக்கை அறிகுறிகள் இல்லை.", why: "ஏன் எச்சரிக்கிறோம்", todo: "இப்போது என்ன செய்வது", listen: "கேளுங்கள்",
+    disclaimer: "குறைந்த ஆபத்து என்பது பாதுகாப்பு உறுதி அல்ல. சந்தேகம் இருந்தால் நம்பிக்கையானவரிடம் கேளுங்கள் அல்லது 1930 ஐ அழையுங்கள்.",
+    error: "சர்வரை அடைய முடியவில்லை. அது இயங்குகிறதா?", foot: "செய்திகள் இந்த சர்வரில் பகுப்பாய்வு செய்யப்படும், சேமிக்கப்படாது.",
+    ex: [
+      ["கைது மிரட்டல்", "உங்களை கைது செய்வோம். உடனடியாக பணம் அனுப்புங்கள். யாரிடமும் சொல்ல வேண்டாம்."],
+      ["பரிசு மற்றும் OTP", "வாழ்த்துக்கள்! நீங்கள் 25 லட்சம் பரிசு வென்றுள்ளீர்கள். ஓடிபி பகிரவும்."],
+      ["சாதாரண செய்தி", "அம்மா, நான் மாலை 7 மணிக்கு வீடு வருவேன்."]
+    ]
+  },
+  hi: {
+    speech: "hi-IN", tagline: "भरोसा करने से पहले जाँचें",
+    sub: "कोई भी संदिग्ध संदेश यहाँ चिपकाएँ। हम बताएँगे कि वह धोखाधड़ी लगता है या नहीं, और क्यों।",
+    label: "संदिग्ध संदेश", placeholder: "संदेश यहाँ चिपकाएँ",
+    check: "जाँचें", clear: "साफ़ करें", examples: "उदाहरण आज़माएँ:", checking: "जाँच हो रही है...",
+    levels: { HIGH: "ज़्यादा खतरा", MEDIUM: "सावधान रहें", LOW: "कम खतरा" },
+    headlines: { HIGH: "बहुत संभव है कि यह धोखाधड़ी है", MEDIUM: "यह संदिग्ध लगता है। सावधान रहें", LOW: "कोई बड़ा चेतावनी संकेत नहीं मिला" },
+    none: "कोई चेतावनी संकेत नहीं मिला।", why: "हमने इसे क्यों चिह्नित किया", todo: "अब क्या करें", listen: "सुनें",
+    disclaimer: "कम जोखिम का मतलब सुरक्षित होने की गारंटी नहीं है। संदेह हो तो किसी भरोसेमंद व्यक्ति से पूछें या 1930 पर कॉल करें।",
+    error: "सर्वर से संपर्क नहीं हो सका। क्या वह चल रहा है?", foot: "संदेश इसी सर्वर पर जाँचे जाते हैं और सहेजे नहीं जाते।",
+    ex: [
+      ["गिरफ्तारी की धमकी", "आपके नाम पर पार्सल में ड्रग्स मिले हैं। आपको गिरफ्तार किया जाएगा। तुरंत पैसे भेजें और किसी को न बताएं।"],
+      ["इनाम और OTP", "बधाई हो! आपने ₹25 लाख का इनाम जीता है। ओटीपी बताएं।"],
+      ["सामान्य संदेश", "माँ, मैं शाम 7 बजे तक घर पहुँच जाऊँगा।"]
+    ]
+  }
+};
+const COLORS = { HIGH: "#d64545", MEDIUM: "#f2a93b", LOW: "#2e9e6b" };
+let lang = "en", last = null;
+const $ = (id) => document.getElementById(id);
+
+function render() {
+  const t = I18N[lang];
+  document.documentElement.lang = lang;
+  $("tagline").textContent = t.tagline; $("sub").textContent = t.sub;
+  $("lblMsg").textContent = t.label; $("msg").placeholder = t.placeholder;
+  $("check").textContent = t.check; $("clear").textContent = t.clear;
+  $("foot").textContent = t.foot;
+  document.querySelectorAll(".langs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  const chips = $("chips"); chips.innerHTML = "";
+  const lead = document.createElement("span"); lead.textContent = t.examples; chips.appendChild(lead);
+  t.ex.forEach(([name, text]) => {
+    const b = document.createElement("button"); b.className = "chip"; b.type = "button"; b.textContent = name;
+    b.onclick = () => { $("msg").value = text; check(); };
+    chips.appendChild(b);
+  });
+  $("listen").style.display = "speechSynthesis" in window ? "" : "none";
+}
+
+function show(v) {
+  const t = I18N[lang]; last = v;
+  $("result").style.display = "block";
+  const color = COLORS[v.level];
+  const badge = $("badge");
+  badge.textContent = t.levels[v.level]; badge.style.background = color;
+  badge.style.color = v.level === "MEDIUM" ? "#10202e" : "#ffffff";
+  $("score").textContent = v.score + "/100"; $("score").style.color = v.level === "MEDIUM" ? "#10202e" : color;
+  const bar = $("bar"); bar.style.background = color; bar.style.width = "0"; requestAnimationFrame(() => bar.style.width = v.score + "%");
+  $("headline").textContent = t.headlines[v.level];
+  $("hWhy").textContent = t.why; $("hTodo").textContent = t.todo;
+  const ul = $("reasons"); ul.innerHTML = "";
+  (v.reasons.length ? v.reasons : [t.none]).forEach(r => { const li = document.createElement("li"); li.textContent = r; ul.appendChild(li); });
+  $("advice").textContent = v.advice;
+  $("listen").textContent = "🔊 " + t.listen;
+  $("disclaimer").textContent = t.disclaimer;
+  $("disclaimer").style.display = v.level === "HIGH" ? "none" : "";
+  $("result").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+async function check() {
+  const text = $("msg").value.trim(); if (!text) { $("msg").focus(); return; }
+  const btn = $("check"), t = I18N[lang]; btn.disabled = true; btn.textContent = t.checking;
+  try {
+    const res = await fetch("/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text, lang }) });
+    if (!res.ok) throw new Error(res.status);
+    show(await res.json());
+  } catch (e) { alert(t.error); }
+  btn.disabled = false; btn.textContent = t.check;
+}
+
+function speak() {
+  if (!last || !("speechSynthesis" in window)) return;
+  const t = I18N[lang];
+  const u = new SpeechSynthesisUtterance([t.headlines[last.level], ...last.reasons, last.advice].join(". "));
+  u.lang = t.speech; speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+
+document.querySelectorAll(".langs button").forEach(b => b.onclick = () => {
+  lang = b.dataset.lang; render(); if ($("msg").value.trim() && last) check();
+});
+$("check").onclick = check; $("listen").onclick = speak;
+$("clear").onclick = () => { $("msg").value = ""; $("result").style.display = "none"; last = null; $("msg").focus(); };
+$("msg").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) check(); });
+render();
+</script>
+</body>
+</html>
