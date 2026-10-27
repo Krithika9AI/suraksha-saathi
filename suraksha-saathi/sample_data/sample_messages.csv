@@ -1,0 +1,8 @@
+text,expected_level
+"This is CBI. A parcel in your name has narcotics. You are under digital arrest. Do not tell anyone and pay immediately.",HIGH
+"Dear customer your KYC update is pending. Account will be blocked today. Click http://bit.ly/kyc-now",HIGH
+"Congratulations you have won a lottery prize money of Rs 25 lakh. Share OTP to claim.",HIGH
+"Approve the collect request on your UPI app to receive Rs 5000 refund.",MEDIUM
+"Work from home and earn 5000 per day. Join our telegram task group.",MEDIUM
+"Your electricity bill of Rs 840 is due on 5 Nov. Pay via the official app.",LOW
+"Hi amma, I will reach home by 7 pm. Need anything from the market?",LOW
